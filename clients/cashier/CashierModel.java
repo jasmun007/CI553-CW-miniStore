@@ -30,8 +30,8 @@ public class CashierModel extends Observable
 
   public CashierModel(MiddleFactory mf)
   {
-    try                                           // 
-    {      
+    try                                           //
+    {
       theStock = mf.makeStockReadWriter();        // Database access
       theOrder = mf.makeOrderProcessing();        // Process order
     } catch ( Exception e )
@@ -40,7 +40,7 @@ public class CashierModel extends Observable
     }
     theState   = State.process;                  // Current state
   }
-  
+
   /**
    * Get the Basket of products
    * @return basket
@@ -67,26 +67,26 @@ public class CashierModel extends Observable
         Product pr = theStock.getDetails(pn);   //  Get details
         if ( pr.getQuantity() >= amount )       //  In stock?
         {                                       //  T
-          theAction =                           //   Display 
-            String.format( "%s : %7.2f (%2d) ", //
-              pr.getDescription(),              //    description
-              pr.getPrice(),                    //    price
-              pr.getQuantity() );               //    quantity     
+          theAction =                           //   Display
+                  String.format( "%s : %7.2f (%2d) ", //
+                          pr.getDescription(),              //    description
+                          pr.getPrice(),                    //    price
+                          pr.getQuantity() );               //    quantity
           theProduct = pr;                      //   Remember prod.
           theProduct.setQuantity( amount );     //    & quantity
-          theState = State.checked;             //   OK await BUY 
+          theState = State.checked;             //   OK await BUY
         } else {                                //  F
           theAction =                           //   Not in Stock
-            pr.getDescription() +" not in stock";
+                  pr.getDescription() +" not in stock";
         }
       } else {                                  // F Stock exists
         theAction =                             //  Unknown
-          "Unknown product number " + pn;       //  product no.
+                "Unknown product number " + pn;       //  product no.
       }
     } catch( StockException e )
     {
-      DEBUG.error( "%s\n%s", 
-            "CashierModel.doCheck", e.getMessage() );
+      DEBUG.error( "%s\n%s",
+              "CashierModel.doCheck", e.getMessage() );
       theAction = e.getMessage();
     }
     setChanged(); notifyObservers(theAction);
@@ -106,9 +106,9 @@ public class CashierModel extends Observable
         theAction = "please check its availablity";
       } else {
         boolean stockBought =                   // Buy
-          theStock.buyStock(                    //  however
-            theProduct.getProductNum(),         //  may fail              
-            theProduct.getQuantity() );         //
+                theStock.buyStock(                    //  however
+                        theProduct.getProductNum(),         //  may fail
+                        theProduct.getQuantity() );         //
         if ( stockBought )                      // Stock bought
         {                                       // T
           makeBasketIfReq();                    //  new Basket ?
@@ -121,14 +121,14 @@ public class CashierModel extends Observable
       }
     } catch( StockException e )
     {
-      DEBUG.error( "%s\n%s", 
-            "CashierModel.doBuy", e.getMessage() );
+      DEBUG.error( "%s\n%s",
+              "CashierModel.doBuy", e.getMessage() );
       theAction = e.getMessage();
     }
     theState = State.process;                   // All Done
     setChanged(); notifyObservers(theAction);
   }
-  
+
   /**
    * Customer pays for the contents of the basket
    */
@@ -139,18 +139,18 @@ public class CashierModel extends Observable
     try
     {
       if ( theBasket != null &&
-           theBasket.size() >= 1 )            // items > 1
+              theBasket.size() >= 1 )            // items > 1
       {                                       // T
         theOrder.newOrder( theBasket );       //  Process order
         theBasket = null;                     //  reset
       }                                       //
       theAction = "Start New Order";            // New order
       theState = State.process;               // All Done
-       theBasket = null;
+      theBasket = null;
     } catch( OrderException e )
     {
-      DEBUG.error( "%s\n%s", 
-            "CashierModel.doCancel", e.getMessage() );
+      DEBUG.error( "%s\n%s",
+              "CashierModel.doCancel", e.getMessage() );
       theAction = e.getMessage();
     }
     theBasket = null;
@@ -165,7 +165,7 @@ public class CashierModel extends Observable
   {
     setChanged(); notifyObservers("Welcome");
   }
-  
+
   /**
    * make a Basket when required
    */
@@ -181,7 +181,7 @@ public class CashierModel extends Observable
       } catch ( OrderException e )
       {
         DEBUG.error( "Comms failure\n" +
-                     "CashierModel.makeBasket()\n%s", e.getMessage() );
+                "CashierModel.makeBasket()\n%s", e.getMessage() );
       }
     }
   }
@@ -192,7 +192,11 @@ public class CashierModel extends Observable
    */
   protected Basket makeBasket()
   {
-    return new Basket();
+    return new Basket() {
+      @Override
+      public Product remove() {
+        return null;
+      }
+    };
   }
 }
-  

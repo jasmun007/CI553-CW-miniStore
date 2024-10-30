@@ -13,107 +13,100 @@ import java.util.Observable;
 /**
  * Implements the Model of the back door client
  */
-public class BackDoorModel extends Observable
-{
-  private Basket      theBasket  = null;            // Bought items
-  private String      pn = "";                      // Product being processed
+public class BackDoorModel extends Observable {
+  private Basket theBasket = null;            // Bought items
+  private String pn = "";                      // Product being processed
 
-  private StockReadWriter theStock     = null;
+  private StockReadWriter theStock = null;
 
   /*
    * Construct the model of the back door client
    * @param mf The factory to create the connection objects
    */
 
-  public BackDoorModel(MiddleFactory mf)
-  {
+  public BackDoorModel(MiddleFactory mf) {
     try                                           // 
-    {      
-      theStock = mf.makeStockReadWriter();        // Database access
-    } catch ( Exception e )
     {
-      DEBUG.error("CustomerModel.constructor\n%s", e.getMessage() );
+      theStock = mf.makeStockReadWriter();        // Database access
+    } catch (Exception e) {
+      DEBUG.error("CustomerModel.constructor\n%s", e.getMessage());
     }
 
     theBasket = makeBasket();                     // Initial Basket
   }
-  
+
   /**
    * Get the Basket of products
+   *
    * @return basket
    */
-  public Basket getBasket()
-  {
+  public Basket getBasket() {
     return theBasket;
   }
 
   /**
    * Check The current stock level
+   *
    * @param productNum The product number
    */
-  public void doCheck(String productNum )
-  {
-    pn  = productNum.trim();                    // Product no.
+  public void doCheck(String productNum) {
+    pn = productNum.trim();                    // Product no.
   }
 
   /**
-   * Query 
+   * Query
+   *
    * @param productNum The product number of the item
    */
-  public void doQuery(String productNum )
-  {
+  public void doQuery(String productNum) {
     String theAction = "";
-    pn  = productNum.trim();                    // Product no.
-    try
-    {                 //  & quantity
-      if ( theStock.exists( pn ) )              // Stock Exists?
+    pn = productNum.trim();                    // Product no.
+    try {                 //  & quantity
+      if (theStock.exists(pn))              // Stock Exists?
       {                                         // T
-        Product pr = theStock.getDetails( pn ); //  Product
+        Product pr = theStock.getDetails(pn); //  Product
         theAction =                             //   Display 
-          String.format( "%s : %7.2f (%2d) ",   //
-          pr.getDescription(),                  //    description
-          pr.getPrice(),                        //    price
-          pr.getQuantity() );                   //    quantity
+                String.format("%s : %7.2f (%2d) ",   //
+                        pr.getDescription(),                  //    description
+                        pr.getPrice(),                        //    price
+                        pr.getQuantity());                   //    quantity
       } else {                                  //  F
         theAction =                             //   Inform
-          "Unknown product number " + pn;       //  product number
-      } 
-    } catch( StockException e )
-    {
+                "Unknown product number " + pn;       //  product number
+      }
+    } catch (StockException e) {
       theAction = e.getMessage();
     }
-    setChanged(); notifyObservers(theAction);
+    setChanged();
+    notifyObservers(theAction);
   }
 
   /**
-   * Re stock 
+   * Re stock
+   *
    * @param productNum The product number of the item
-   * @param quantity How many to be added
+   * @param quantity   How many to be added
    */
-  public void doRStock(String productNum, String quantity )
-  {
+  public void doRStock(String productNum, String quantity) {
     String theAction = "";
     theBasket = makeBasket();
-    pn  = productNum.trim();                    // Product no.
-    String pn  = productNum.trim();             // Product no.
+    pn = productNum.trim();                    // Product no.
+    String pn = productNum.trim();             // Product no.
     int amount = 0;
-    try
-    {
+    try {
       String aQuantity = quantity.trim();
-      try
-      {
+      try {
         amount = Integer.parseInt(aQuantity);   // Convert
-        if ( amount < 0 )
+        if (amount < 0)
           throw new NumberFormatException("-ve");
-      }
-      catch ( Exception err)
-      {
+      } catch (Exception err) {
         theAction = "Invalid quantity";
-        setChanged(); notifyObservers(theAction);
+        setChanged();
+        notifyObservers(theAction);
         return;
       }
-  
-      if ( theStock.exists( pn ) )              // Stock Exists?
+
+      if (theStock.exists(pn))              // Stock Exists?
       {                                         // T
         theStock.addStock(pn, amount);          //  Re stock
         Product pr = theStock.getDetails(pn);   //  Get details
@@ -121,33 +114,32 @@ public class BackDoorModel extends Observable
         theAction = "";                         // Display 
       } else {                                  // F
         theAction =                             //  Inform Unknown
-          "Unknown product number " + pn;       //  product number
-      } 
-    } catch( StockException e )
-    {
+                "Unknown product number " + pn;       //  product number
+      }
+    } catch (StockException e) {
       theAction = e.getMessage();
     }
-    setChanged(); notifyObservers(theAction);
+    setChanged();
+    notifyObservers(theAction);
   }
 
   /**
    * Clear the product()
    */
-  public void doClear()
-  {
+  public void doClear() {
     String theAction = "";
     theBasket.clear();                        // Clear s. list
     theAction = "Enter Product Number";       // Set display
-    setChanged(); notifyObservers(theAction);  // inform the observer view that model changed
+    setChanged();
+    notifyObservers(theAction);  // inform the observer view that model changed
   }
-  
+
   /**
    * return an instance of a Basket
+   *
    * @return a new instance of a Basket
    */
-  protected Basket makeBasket()
-  {
-    return new Basket();
+  protected Basket makeBasket() {
+    return this.theBasket;
   }
 }
-

@@ -32,7 +32,7 @@ public class CustomerModel extends Observable
   public CustomerModel(MiddleFactory mf)
   {
     try                                          // 
-    {  
+    {
       theStock = mf.makeStockReader();           // Database access
     } catch ( Exception e )
     {
@@ -41,7 +41,7 @@ public class CustomerModel extends Observable
     }
     theBasket = makeBasket();                    // Initial Basket
   }
-  
+
   /**
    * return the Basket of products
    * @return the basket of products
@@ -67,7 +67,7 @@ public class CustomerModel extends Observable
       {                                         // T
         Product pr = theStock.getDetails( pn ); //  Product
         if ( pr.getQuantity() >= amount )       //  In stock?
-        { 
+        {
           theAction =                           //   Display 
             String.format( "%s : %7.2f (%2d) ", //
               pr.getDescription(),              //    description
@@ -104,16 +104,16 @@ public class CustomerModel extends Observable
     thePic = null;                            // No picture
     setChanged(); notifyObservers(theAction);
   }
-  
+
   /**
    * Return a picture of the product
    * @return An instance of an ImageIcon
-   */ 
+   */
   public ImageIcon getPicture()
   {
     return thePic;
   }
-  
+
   /**
    * ask for update of view callled at start
    */
@@ -128,7 +128,7 @@ public class CustomerModel extends Observable
    */
   protected Basket makeBasket()
   {
-    return new Basket();
+    return null;
   }
 }
 
