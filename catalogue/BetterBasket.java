@@ -12,67 +12,26 @@ import java.util.Comparator;
  */
 public class BetterBasket extends Basket
 {
-  private static final long serialVersionUID = 1L;
-  private ArrayList<String> theProductNumList = new ArrayList<String>();
-
-  /**
-   * Add a product to the BetterBasket.
-   * Product is appended to the end, and then sort by product number
-   * @param pr A product to be added to the basket
-   * @return true if successfully adds the product
-   */
   @Override
   public boolean add( Product pr )
   {
-    // search product
-    int idx = findIndex(pr.getProductNum());
-    if(idx != -1)
-      ((Product)get(idx)).increaseQuantity();
-    else {
-      super.add( pr );     // Call add in ArrayList
-      // sort products in basket by product no
-      this.sort((Comparator<? super Product>) pr);
+    for(Product PrINList : this ) {
+    if(prInList.getProductNumi().equals(pr.getProductNum())) {
+      int quantity = pr.getQuantity()+prInList.GetQuantity();
+      prInList.setQuantity(quantity);
+      return (true);
     }
-
-    theProductNumList.add(pr.getProductNum());
-    return true;
+    }
+    }
+    return super.add( pr );     // Call add in ArrayList
   }
 
   @Override
-  public Product remove()
-  {
-    if(this.isEmpty())
-      return null;
-    // get last added product
-    int lastIdx = theProductNumList.size()-1;
-    String lastPrNum = theProductNumList.get(lastIdx);
-    int idx = findIndex(lastPrNum);
-    if(idx == -1)
-      return null;
-    theProductNumList.remove(lastIdx);
-    Product pr = this.get(idx);
-    // if quantity is 0, remove the product
-    if(((Product)get(idx)).decreaseQuantity() != true)
-      this.remove(idx);
-
-    return new Product(pr.getProductNum(), pr.getDescription(), pr.getPrice(), 1);
+  public Product remove() {
+    return null;
   }
 
-  private int findIndex(String prNum)
-  {
-    // search product
-    int idx = 0;
-    boolean exist = false;
-    for(Product p : this) {
-      if(prNum.compareTo(p.getProductNum()) == 0) {
-        exist = true;
-        break;
-      }
-      idx++;
-    }
-    if(exist == true)
-      return idx;
-    else
-      return -1;
-  }
+  // You need to add code here
+  // merge the items for same product,
+  // or sort the item based on the product number
 }

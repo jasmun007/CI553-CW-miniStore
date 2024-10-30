@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import static javax.swing.UIManager.put;
 
-public class nameToNumber extends HashMap<String,String> {
+public class NameToNumber extends HashMap<String,String> {
 
     NameToNumber() {
         put("0001", "TV");
