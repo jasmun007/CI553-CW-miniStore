@@ -15,23 +15,17 @@ public class BetterBasket extends Basket
   @Override
   public boolean add( Product pr )
   {
-    for(Product PrINList : this ) {
-    if(prInList.getProductNumi().equals(pr.getProductNum())) {
-      int quantity = pr.getQuantity()+prInList.GetQuantity();
-      prInList.setQuantity(quantity);
+    for(Product prINList : this ) {
+    if(prINList.getProductNum().equals(pr.getProductNum())) {
+      int quantity = pr.getQuantity()+prINList.getQuantity();
+      prINList.setQuantity(quantity);
       return (true);
     }
+
     }
+    super.add( pr );     // Call add in ArrayList
+    return (true);
     }
-    return super.add( pr );     // Call add in ArrayList
+
   }
 
-  @Override
-  public Product remove() {
-    return null;
-  }
-
-  // You need to add code here
-  // merge the items for same product,
-  // or sort the item based on the product number
-}

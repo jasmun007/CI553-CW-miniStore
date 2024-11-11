@@ -94,5 +94,5 @@ public abstract class Basket extends ArrayList<Product>
     return sb.toString();
   }
 
-    public abstract Product remove();
+
 }

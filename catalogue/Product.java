@@ -75,7 +75,7 @@ public class Product
   }
 
   // check if the product is equal to the other
-  @Override
+  /*@Override
   public boolean equals(Object other)
   {
     if(theProductNum.compareTo(((Product)other).getProductNum()) != 0)
@@ -83,16 +83,16 @@ public class Product
     else
       return true;
   }
-
+*/
   /**
    *  compare two product's product number
    *  return 0 : numbers are equal,
    *  		1: arg0's product number is greater than arg1's
    *  		-1: arg0's product number is less than arg1
    */
-  @Override
+  /*@Override
   public int compare(Product pr1, Product pr2) {
     return pr1.getProductNum().compareTo(pr2.getProductNum());
-  }
+  }*/
 
 }
