@@ -2,6 +2,7 @@ package catalogue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -24,6 +25,8 @@ public class BetterBasket extends Basket
 
     }
     super.add( pr );     // Call add in ArrayList
+    Collections.sort(this,new sortByProductNum());
+
     return (true);
     }
 
