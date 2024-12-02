@@ -10,9 +10,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Implements the Customer view.
+ * @author  Mike Smith University of Brighton
+ * @version 1.0
  */
 
 public class CustomerView implements Observer
@@ -21,19 +24,24 @@ public class CustomerView implements Observer
   {
     public static final String CHECK  = "Check";
     public static final String CLEAR  = "Clear";
+
+
   }
 
   private static final int H = 300;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
 
-  private final JLabel      pageTitle  = new JLabel();
   private final JLabel      theAction  = new JLabel();
   private final JTextField  theInput   = new JTextField();
+  //private final JTextField  theInputNo = new JTextField();
   private final JTextArea   theOutput  = new JTextArea();
   private final JScrollPane theSP      = new JScrollPane();
   private final JButton     theBtCheck = new JButton( Name.CHECK );
-  private final JButton     theBTCheckName = new JButton( "Pname" );
   private final JButton     theBtClear = new JButton( Name.CLEAR );
+  private final JButton     darkMode = new JButton( "☀" );
+  private final JTextField theInputName = new JTextField(); // Text field for product name
+  private final JButton theBtCheckByName = new JButton("Check By Name"); // Button for name check
+
 
   private Picture thePicture = new Picture(80,80);
   private StockReader theStock   = null;
@@ -43,14 +51,15 @@ public class CustomerView implements Observer
    * Construct the view
    * @param rpc   Window in which to construct
    * @param mf    Factor to deliver order and stock objects
-   * @param x     x-cordinate of position of window on screen 
-   * @param y     y-cordinate of position of window on screen  
+   * @param x     x-cordinate of position of window on screen
+   * @param y     y-cordinate of position of window on screen
    */
-  
+
   public CustomerView( RootPaneContainer rpc, MiddleFactory mf, int x, int y )
   {
-    try                                             // 
-    {      
+    AtomicBoolean DarkMode = new AtomicBoolean(false);
+    try                                             //
+    {
       theStock  = mf.makeStockReader();             // Database Access
     } catch ( Exception e )
     {
@@ -63,59 +72,138 @@ public class CustomerView implements Observer
     rootWindow.setLocation( x, y );
 
     Font f = new Font("Monospaced",Font.PLAIN,12);  // Font f is
-    
-    pageTitle.setBounds( 110, 0 , 270, 20 );       
-    pageTitle.setText( "Search products" );                        
-    cp.add( pageTitle );
 
     theBtCheck.setBounds( 16, 25+60*0, 80, 40 );    // Check button
+    theBtCheck.setBackground(Color.black);
+
     theBtCheck.addActionListener(                   // Call back code
-      e -> cont.doCheck( theInput.getText() ) );
-    cp.add ( theBtCheck );                    //  Add to canvas
+            e -> cont.doCheck( theInput.getText() ) );
+    cp.add( theBtCheck );                          //  Add to canvas
 
+    //Check By Name Button
+    theBtCheckByName.setBounds(16, 25 + 60 * 2, 120, 40); // Position for button
+    theBtCheckByName.setBackground(Color.black);
+    theBtCheckByName.addActionListener(       // Call back code
+            e -> cont.doCheckByName(theInputName.getText()));
+    cp.add(theBtCheckByName);
 
-    theBTCheckName.setBounds( 16, 25+60*1, 80, 40 );    // Check button
-    theBTCheckName.setBackground( Color.BLUE );
-    theBTCheckName.setForeground(Color.RED );
-    theBTCheckName.addActionListener(                   // Call back code
-            e -> cont.doCheckByName( theInput.getText() ) );
-    cp.add ( theBTCheckName );                    //  Add to canvas
-
-
-
-
-
-
-    theBtCheck.setBackground( Color.white );
     theBtClear.setBounds( 16, 25+60*1, 80, 40 );    // Clear button
     theBtClear.addActionListener(                   // Call back code
-      e -> cont.doClear() );
+            e -> cont.doClear() );
     cp.add( theBtClear );                           //  Add to canvas
+    // Add Input Field for Name
+    theInputName.setBounds(110, 100, 120, 40); // Position for name input
+    theInputName.setText("Product Name");
+    theInputName.setForeground(Color.GRAY); // Placeholder text color
+    theInputName.addFocusListener(new java.awt.event.FocusListener() {
+      @Override
+      public void focusGained(java.awt.event.FocusEvent e) {
+        if (theInputName.getText().equals("Product Name")) {
+          theInputName.setText("");
+          theInputName.setForeground(Color.BLACK);
+        }
+      }
 
-    theAction.setBounds( 110, 25 , 270, 20 );       // Message area
-    theAction.setText( " " );                       // blank
-    cp.add( theAction );                            //  Add to canvas
+      @Override
+      public void focusLost(java.awt.event.FocusEvent e) {
+        if (theInputName.getText().isEmpty()) {
+          theInputName.setText("Product Name");
+          theInputName.setForeground(Color.GRAY);
+        }
+      }
+    });
+    cp.add(theInputName);
 
-    theInput.setBounds( 110, 50, 270, 40 );         // Product no area
-    theInput.setText("");                           // Blank
-    cp.add( theInput );                             //  Add to canvas
-    
-    theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
-    theOutput.setText( "" );                        //  Blank
-    theOutput.setFont( f );                         //  Uses font  
-    cp.add( theSP );                                //  Add to canvas
-    theSP.getViewport().add( theOutput );           //  In TextArea
 
-    thePicture.setBounds( 16, 25+60*2, 80, 80 );   // Picture area
-    cp.add( thePicture );                           //  Add to canvas
+    darkMode.setBounds(350, 0, 20, 20); 				//smaller button, in the corner
+    darkMode.addActionListener(e -> {
+      if (DarkMode.get()) {						//if dark mode is true
+        //then it should switch to light mode
+        rpc.getContentPane().setBackground(Color.WHITE);
+        setButtonTheme(Color.WHITE);			//all the backgrounds
+        setTextTheme(Color.BLACK);				//all the text
+
+        darkMode.setText("☀");
+      } else {
+        //Switch to dark mode
+        rpc.getContentPane().setBackground(Color.BLACK);
+        setButtonTheme(Color.DARK_GRAY);
+        setTextTheme(Color.WHITE);
+        darkMode.setText("☾︎");
+      }
+      DarkMode.set(!DarkMode.get());
+    });
+    cp.add(darkMode);
+
+
+    theAction.setBounds(110, 25, 270, 20);   // Message area
+    theAction.setText("");                   // Blank
+    cp.add(theAction);                       // Add to canvas
+
+    theInput.setBounds(110, 50, 120, 40);    // Product number area
+    theInput.setText("Product Number");      // Placeholder text
+    theInput.setForeground(Color.GRAY);      // Placeholder text color
+
+    // Add FocusListener for ghost text
+    theInput.addFocusListener(new java.awt.event.FocusListener() {
+      @Override
+      public void focusGained(java.awt.event.FocusEvent e) {
+        if (theInput.getText().equals("Product Number")) {
+          theInput.setText("");         // Clear placeholder
+          theInput.setForeground(Color.BLACK); // Set normal text color
+        }
+      }
+
+      @Override
+      public void focusLost(java.awt.event.FocusEvent e) {
+        if (theInput.getText().isEmpty()) {
+          theInput.setText("Product Number");  // Restore placeholder
+          theInput.setForeground(Color.GRAY); // Set placeholder text color
+        }
+      }
+    });
+    cp.add(theInput); // Add to canvas
+
+    theSP.setBounds(110, 100, 270, 160); // Scrolling pane
+    theOutput.setText("");               // Blank
+    theOutput.setFont(f);                // Uses font
+    cp.add(theSP);                       // Add to canvas
+    theSP.getViewport().add(theOutput);  // In TextArea
+
+    thePicture.setBounds(16, 25 + 60 * 2, 80, 80); // Picture area
+    cp.add(thePicture); // Add to canvas
     thePicture.clear();
 
-    
-    rootWindow.setVisible( true );                  // Make visible);
-    theInput.requestFocus();                        // Focus is here
+    rootWindow.setVisible(true); // Make visible
+    theInput.requestFocus();     // Focus is here
   }
 
-   /**
+
+  private void setTextTheme(Color color) {
+
+    theAction.setForeground(color);
+    theInput.setForeground(color);
+    theOutput.setForeground(color);
+    theSP.setForeground(color);
+    theBtCheck.setForeground(color);
+    theBtClear.setForeground(color);
+    darkMode.setForeground(color);
+
+  }
+
+
+  private void setButtonTheme(Color color) {
+    theAction.setBackground(color);
+    theInput.setBackground(color);
+    theOutput.setBackground(color);
+    theSP.setBackground(color);
+    theBtCheck.setBackground(color);
+    theBtClear.setBackground(color);
+    darkMode.setBackground(color);
+  }
+
+
+  /**
    * The controller object, used so that an interaction can be passed to the controller
    * @param c   The controller
    */
@@ -128,9 +216,12 @@ public class CustomerView implements Observer
   /**
    * Update the view
    * @param modelC   The observed model
-   * @param arg      Specific args 
+   * @param arg      Specific args
    */
-   
+
+
+
+
   public void update( Observable modelC, Object arg )
   {
     CustomerModel model  = (CustomerModel) modelC;
