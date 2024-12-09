@@ -83,7 +83,7 @@ public class CustomerModel extends Observable
         }
       } else {                                  // F
         theAction =                             //  Inform Unknown
-                "Unknown product number " + pn;       //  product number
+                "Unknown product: " + pn;       //  product number
       }
     } catch( StockException e )
     {
@@ -93,6 +93,8 @@ public class CustomerModel extends Observable
     setChanged(); notifyObservers(theAction);
   }
 
+  //*
+
   /**
    * Clear the products from the basket
    */
@@ -100,7 +102,7 @@ public class CustomerModel extends Observable
   {
     String theAction = "";
     theBasket.clear();                        // Clear s. list
-    theAction = "Enter Product Number";       // Set display
+    theAction = "Enter Product Number Or Name";       // Set display
     thePic = null;                            // No picture
     setChanged(); notifyObservers(theAction);
   }

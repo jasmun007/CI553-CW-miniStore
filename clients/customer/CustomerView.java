@@ -22,7 +22,7 @@ public class CustomerView implements Observer
 {
   class Name                              // Names of buttons
   {
-    public static final String CHECK  = "Check";
+    public static final String CHECK  = "Search";
     public static final String CLEAR  = "Clear";
 
 
@@ -39,8 +39,7 @@ public class CustomerView implements Observer
   private final JButton     theBtCheck = new JButton( Name.CHECK );
   private final JButton     theBtClear = new JButton( Name.CLEAR );
   private final JButton     darkMode = new JButton( "☀" );
-  private final JTextField theInputName = new JTextField(); // Text field for product name
-  private final JButton theBtCheckByName = new JButton("Check By Name"); // Button for name check
+  private final JButton theBtCheckByName = new JButton("Name Search"); // Button for name check
 
 
   private Picture thePicture = new Picture(80,80);
@@ -75,44 +74,44 @@ public class CustomerView implements Observer
 
     theBtCheck.setBounds( 16, 25+60*0, 80, 40 );    // Check button
     theBtCheck.setBackground(Color.black);
-
     theBtCheck.addActionListener(                   // Call back code
             e -> cont.doCheck( theInput.getText() ) );
     cp.add( theBtCheck );                          //  Add to canvas
 
     //Check By Name Button
-    theBtCheckByName.setBounds(16, 25 + 60 * 2, 120, 40); // Position for button
+    theBtCheckByName.setBounds(16, 25 + 60 * 2, 80, 40); // Position for button
     theBtCheckByName.setBackground(Color.black);
     theBtCheckByName.addActionListener(       // Call back code
-            e -> cont.doCheckByName(theInputName.getText()));
+            e -> cont.doCheckByName(theInput.getText()));
     cp.add(theBtCheckByName);
+
 
     theBtClear.setBounds( 16, 25+60*1, 80, 40 );    // Clear button
     theBtClear.addActionListener(                   // Call back code
             e -> cont.doClear() );
     cp.add( theBtClear );                           //  Add to canvas
     // Add Input Field for Name
-    theInputName.setBounds(110, 100, 120, 40); // Position for name input
-    theInputName.setText("Product Name");
-    theInputName.setForeground(Color.GRAY); // Placeholder text color
-    theInputName.addFocusListener(new java.awt.event.FocusListener() {
+    theInput.setBounds(110, 100, 120, 40); // Position for name input
+    theInput.setText("Name/Item Number:");
+    theInput.setForeground(Color.GRAY); // Placeholder text color
+    theInput.addFocusListener(new java.awt.event.FocusListener() {
       @Override
       public void focusGained(java.awt.event.FocusEvent e) {
-        if (theInputName.getText().equals("Product Name")) {
-          theInputName.setText("");
-          theInputName.setForeground(Color.BLACK);
+        if (theInput.getText().equals("Name/Item Number:")) {
+          theInput.setText("");
+          theInput.setForeground(Color.BLACK);
         }
       }
 
       @Override
       public void focusLost(java.awt.event.FocusEvent e) {
-        if (theInputName.getText().isEmpty()) {
-          theInputName.setText("Product Name");
-          theInputName.setForeground(Color.GRAY);
+        if (theInput.getText().isEmpty()) {
+          theInput.setText("Name/Item Number:");
+          theInput.setForeground(Color.GRAY);
         }
       }
     });
-    cp.add(theInputName);
+    cp.add(theInput);
 
 
     darkMode.setBounds(350, 0, 20, 20); 				//smaller button, in the corner
@@ -141,14 +140,14 @@ public class CustomerView implements Observer
     cp.add(theAction);                       // Add to canvas
 
     theInput.setBounds(110, 50, 120, 40);    // Product number area
-    theInput.setText("Product Number");      // Placeholder text
+    theInput.setText("Name/Item Number:");      // Placeholder text
     theInput.setForeground(Color.GRAY);      // Placeholder text color
 
     // Add FocusListener for ghost text
     theInput.addFocusListener(new java.awt.event.FocusListener() {
       @Override
       public void focusGained(java.awt.event.FocusEvent e) {
-        if (theInput.getText().equals("Product Number")) {
+        if (theInput.getText().equals("Name/Item Number:")) {
           theInput.setText("");         // Clear placeholder
           theInput.setForeground(Color.BLACK); // Set normal text color
         }
@@ -157,7 +156,7 @@ public class CustomerView implements Observer
       @Override
       public void focusLost(java.awt.event.FocusEvent e) {
         if (theInput.getText().isEmpty()) {
-          theInput.setText("Product Number");  // Restore placeholder
+          theInput.setText("Name/Item Number:");  // Restore placeholder
           theInput.setForeground(Color.GRAY); // Set placeholder text color
         }
       }
@@ -170,7 +169,7 @@ public class CustomerView implements Observer
     cp.add(theSP);                       // Add to canvas
     theSP.getViewport().add(theOutput);  // In TextArea
 
-    thePicture.setBounds(16, 25 + 60 * 2, 80, 80); // Picture area
+    thePicture.setBounds(16, 25 + 80 * 2, 80, 80); // Picture area
     cp.add(thePicture); // Add to canvas
     thePicture.clear();
 
@@ -187,6 +186,7 @@ public class CustomerView implements Observer
     theSP.setForeground(color);
     theBtCheck.setForeground(color);
     theBtClear.setForeground(color);
+    theBtCheckByName.setForeground(color);
     darkMode.setForeground(color);
 
   }
@@ -198,6 +198,7 @@ public class CustomerView implements Observer
     theOutput.setBackground(color);
     theSP.setBackground(color);
     theBtCheck.setBackground(color);
+    theBtCheckByName.setBackground(color);
     theBtClear.setBackground(color);
     darkMode.setBackground(color);
   }
