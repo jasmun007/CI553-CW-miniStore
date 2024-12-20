@@ -107,6 +107,18 @@ public class CustomerModel extends Observable
     setChanged(); notifyObservers(theAction);
   }
 
+
+  public void undoLast() {
+    String theAction = "";
+    if (theBasket.size() >= 1) {
+      theBasket.remove(theBasket.size() - 1);
+      theAction = "Removed last item";
+    } else {
+      theAction = "No items to undo!";
+    }
+    setChanged();
+    notifyObservers(theAction);
+  }
   /**
    * Return a picture of the product
    * @return An instance of an ImageIcon

@@ -45,4 +45,10 @@ public class CashierController
   {
     model.doBought();
   }
+
+  public void doUndoLast() {
+    model.undoLastPurchase();
+  }
+
 }
+

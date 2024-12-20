@@ -31,6 +31,7 @@ public class CashierView implements Observer
   private final JButton     theBtCheck = new JButton( CHECK );
   private final JButton     theBtBuy   = new JButton( BUY );
   private final JButton     theBtBought= new JButton( BOUGHT );
+  private final JButton theBtUndo = new JButton("Undo Last"); // New undo button
 
   private StockReadWriter theStock     = null;
   private OrderProcessing theOrder     = null;
@@ -96,7 +97,12 @@ public class CashierView implements Observer
     theSP.getViewport().add( theOutput );           //  In TextArea
     rootWindow.setVisible( true );                  // Make visible
     theInput.requestFocus();                        // Focus is here
+
+    theBtUndo.setBounds(16, 25 + 60 * 2, 80, 40); // Set button position
+    theBtUndo.addActionListener(e -> cont.doUndoLast()); // Call doUndoLast() in controller
+    cp.add(theBtUndo); // Added button to the window
   }
+
 
   /**
    * The controller object, used so that an interaction can be passed to the controller

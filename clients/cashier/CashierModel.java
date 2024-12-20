@@ -41,6 +41,27 @@ public class CashierModel extends Observable
     }
     theState   = State.process;                  // Current state
   }
+//undo last purchase etc
+  public void undoLastPurchase() {
+    String theAction = "";
+    try {
+      if (theBasket != null && theBasket.size() >= 1) {
+        Product lastProduct = theBasket.get(theBasket.size() - 1);
+        theBasket.remove(lastProduct);
+        theStock.addStock(lastProduct.getProductNum(), lastProduct.getQuantity());
+        theAction = "Removed " + lastProduct.getDescription();
+      } else {
+        theAction = "No items to undo!";
+      }
+    } catch (StockException e) {
+      DEBUG.error("%s\n%s",
+              "CashierModel.undoLastPurchase", e.getMessage());
+      theAction = e.getMessage();
+    }
+    setChanged();
+    notifyObservers(theAction);
+  }
+
 
   /**
    * Get the Basket of products

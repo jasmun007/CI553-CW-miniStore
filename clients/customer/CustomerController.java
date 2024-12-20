@@ -42,5 +42,8 @@ public class CustomerController
     {
       model.doClear();
     }
+    public void doUndoLast() {
+    model.undoLast();
+    }
 
   }

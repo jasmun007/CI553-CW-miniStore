@@ -40,7 +40,7 @@ public class CustomerView implements Observer
   private final JButton     theBtClear = new JButton( Name.CLEAR );
   private final JButton     darkMode = new JButton( "☀" );
   private final JButton theBtCheckByName = new JButton("Name Search"); // Button for name check
-
+  private final JButton theBtUndo = new JButton("Undo Last"); // New undo button
 
   private Picture thePicture = new Picture(80,80);
   private StockReader theStock   = null;
@@ -85,6 +85,11 @@ public class CustomerView implements Observer
             e -> cont.doCheckByName(theInput.getText()));
     cp.add(theBtCheckByName);
 
+
+    //undo button
+    theBtUndo.setBounds(250, 0+50*1, 80, 40); // Set button position
+    theBtUndo.addActionListener(e -> cont.doUndoLast()); // Call doUndoLast() in controller
+    cp.add(theBtUndo); // Add button to the window
 
     theBtClear.setBounds( 16, 25+60*1, 80, 40 );    // Clear button
     theBtClear.addActionListener(                   // Call back code
@@ -188,6 +193,7 @@ public class CustomerView implements Observer
     theBtClear.setForeground(color);
     theBtCheckByName.setForeground(color);
     darkMode.setForeground(color);
+    theBtUndo.setForeground(color);
 
   }
 
@@ -201,6 +207,8 @@ public class CustomerView implements Observer
     theBtCheckByName.setBackground(color);
     theBtClear.setBackground(color);
     darkMode.setBackground(color);
+    theBtUndo.setBackground(color);
+
   }
 
 
