@@ -8,6 +8,9 @@ import middle.MiddleFactory;
 import middle.StockException;
 import middle.StockReadWriter;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Observable;
 
 /**
@@ -129,10 +132,44 @@ public class BackDoorModel extends Observable
     }
     setChanged(); notifyObservers(theAction);
   }
-
-  /**
-   * Clear the product()
-   */
+////low stock alert
+//public void doLowStockAlert() {
+//  String theAction = "";
+//  try {
+//    // Get the Statement object from theStock
+//    Statement stmt = theStock.getStatementObject();
+//
+//    // Execute the query using the Statement object
+//    ResultSet rs = stmt.executeQuery("SELECT * FROM ProductTable");
+//
+//    StringBuilder lowStockProducts = new StringBuilder();
+//
+//    while (rs.next()) {
+//      Product pr = theStock.getDetails(rs.getString("productNo"));
+//      if (pr.getQuantity() < 10) { // Threshold for low stock
+//        lowStockProducts.append(pr.getDescription()).append(" (").append(pr.getQuantity()).append(")\n");
+//      }
+//    }
+//
+//    if (lowStockProducts.length() > 0) {
+//      theAction = "Low stock:\n" + lowStockProducts;
+//    } else {
+//      theAction = "All products sufficiently stocked.";
+//    }
+//
+//  } catch (StockException | SQLException e) {
+//    DEBUG.error("BackDoorModel.doLowStockAlert()\n%s", e.getMessage());
+//    theAction = e.getMessage();
+//  }
+//  setChanged();
+//  notifyObservers(theAction);
+//}
+//
+//
+//
+//  /**
+//   * Clear the product()
+//   */
   public void doClear()
   {
     String theAction = "";

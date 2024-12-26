@@ -119,7 +119,7 @@ public class CustomerView implements Observer
     cp.add(theInput);
 
 
-    darkMode.setBounds(350, 0, 20, 20); 				//smaller button, in the corner
+    darkMode.setBounds(350, 0, 20, 20); 			//smaller button, in the corner
     darkMode.addActionListener(e -> {
       if (DarkMode.get()) {						//if dark mode is true
         //then it should switch to light mode
@@ -138,7 +138,6 @@ public class CustomerView implements Observer
       DarkMode.set(!DarkMode.get());
     });
     cp.add(darkMode);
-
 
     theAction.setBounds(110, 25, 270, 20);   // Message area
     theAction.setText("");                   // Blank

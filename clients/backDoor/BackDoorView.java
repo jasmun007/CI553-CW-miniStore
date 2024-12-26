@@ -30,6 +30,7 @@ public class BackDoorView implements Observer
   private final JButton     theBtClear = new JButton( CLEAR );
   private final JButton     theBtRStock = new JButton( RESTOCK );
   private final JButton     theBtQuery = new JButton( QUERY );
+  private final JButton theBtLowStockAlert = new JButton("Low Stock Alert");
   
   private StockReadWriter theStock     = null;
   private BackDoorController cont= null;
@@ -77,7 +78,7 @@ public class BackDoorView implements Observer
     theBtClear.addActionListener(                   // Call back code
       e -> cont.doClear() );
     cp.add( theBtClear );                           //  Add to canvas
-
+// or.
  
     theAction.setBounds( 110, 25 , 270, 20 );       // Message area
     theAction.setText( "" );                        // Blank

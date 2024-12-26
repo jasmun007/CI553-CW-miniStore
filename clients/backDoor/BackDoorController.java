@@ -47,6 +47,9 @@ public class BackDoorController
     model.doClear();
   }
 
-  
+//  public void doLowStockAlert() {
+//    model.doLowStockAlert();
+//  }
+//
 }
 
